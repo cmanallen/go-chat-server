@@ -10,15 +10,15 @@
     <input type="text" id="chat-message" />
     <button type="submit" onclick="submitMessage()">Submit</button>
 
-    <script src="javascript">
-        var socket = new WebSocket('ws://' + window.location.host + '/ws');
+    <script>
+        var socket = new WebSocket('ws://localhost:5000/ws');
 
         socket.onmessage = function(message) {
             var message_node = document.createElement("li");
-            message_node.innerHTML = message;
+            message_node.appendChild(document.createTextNode(message.data));
 
             var messages = document.getElementById("messages");
-            messages.appendChild(message);
+            messages.appendChild(message_node);
         };
 
         var submitMessage = function() {
@@ -27,12 +27,11 @@
             username = document.getElementById("chat-username");
             message = document.getElementById("chat-message");
 
-            ws.send(JSON.stringify({
+            socket.send(JSON.stringify({
                 "username": username.value,
                 "message": message.value,
             }));
 
-            username.value = "";
             message.value = "";
         }
     </script>
