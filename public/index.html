@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G.O.L Instant Messenger</title>
+</head>
+<body>
+    <ul id="messages"></ul>
+    <input type="text" id="chat-username" />
+    <input type="text" id="chat-message" />
+    <button type="submit" onclick="submitMessage()">Submit</button>
+
+    <script src="javascript">
+        var socket = new WebSocket('ws://' + window.location.host + '/ws');
+
+        socket.onmessage = function(message) {
+            var message_node = document.createElement("li");
+            message_node.innerHTML = message;
+
+            var messages = document.getElementById("messages");
+            messages.appendChild(message);
+        };
+
+        var submitMessage = function() {
+            event.preventDefault();
+
+            username = document.getElementById("chat-username");
+            message = document.getElementById("chat-message");
+
+            ws.send(JSON.stringify({
+                "username": username.value,
+                "message": message.value,
+            }));
+
+            username.value = "";
+            message.value = "";
+        }
+    </script>
+</body>
+</html>
